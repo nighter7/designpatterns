@@ -16,7 +16,7 @@ type RethinkDBUserImpl struct {
 
 func (b *RethinkDBUserImpl) init() {
 	if b.rdbc == nil {
-		b.rdbc = new(r.RethinkDBConnection)
+		b.rdbc = r.GetInstance()
 		err := b.rdbc.GetError()
 
 		if err != nil {

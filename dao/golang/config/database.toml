@@ -1,0 +1,6 @@
+# Properties for dao configuration
+[dao]
+address="192.168.99.100:8081"
+database="test"
+username="admin"
+password=""

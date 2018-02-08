@@ -1,8 +1,11 @@
 package database
 
 import (
+	"fmt"
 	"log"
+	"sync"
 
+	v "github.com/spf13/viper"
 	r "gopkg.in/gorethink/gorethink.v4"
 )
 
@@ -12,14 +15,37 @@ type RethinkDBConnection struct {
 	error   error
 }
 
+var rtdbconn *RethinkDBConnection
+var once sync.Once
+
+func init() {
+	v.AddConfigPath("../config")
+	v.SetConfigName("database")
+
+	err := v.ReadInConfig()
+	if err != nil {
+		fmt.Printf("Config file not found...")
+	}
+}
+
+// GetInstance returns a reference to RethinkDBConnection instance
+func GetInstance() *RethinkDBConnection {
+	once.Do(func() {
+		rtdbconn = &RethinkDBConnection{}
+		rtdbconn.establishConnection()
+	})
+
+	return rtdbconn
+}
+
 // establishConnection will return a session to RethinkDB database
 func (c *RethinkDBConnection) establishConnection() {
 	if c.session == nil {
 		c.session, c.error = r.Connect(r.ConnectOpts{
-			Address:  "192.168.99.100:8081",
-			Database: "test",
-			Username: "admin",
-			Password: "",
+			Address:  v.GetString("dao.address"),
+			Database: v.GetString("dao.database"),
+			Username: v.GetString("dao.username"),
+			Password: v.GetString("dao.password"),
 		})
 
 		if c.error != nil {
