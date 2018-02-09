@@ -46,6 +46,8 @@ func (c *RethinkDBConnection) establishConnection() {
 			Database: v.GetString("dao.database"),
 			Username: v.GetString("dao.username"),
 			Password: v.GetString("dao.password"),
+			MaxIdle:  v.GetInt("dao.maxIdle"),
+			MaxOpen:  v.GetInt("dao.maxOpen"),
 		})
 
 		if c.error != nil {

@@ -7,10 +7,8 @@ import (
 	"github.com/nighter7/designpatterns/dao/golang/dto"
 )
 
-var a dao.UserDAO
-
 func main() {
-	a = new(dao.RethinkDBUserImpl)
+	a := &dao.RethinkDBUserImpl{}
 	b := []dto.UserDTO{
 		dto.UserDTO{
 			ID:   1,
